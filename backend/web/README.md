@@ -8,36 +8,40 @@ Frontend ini dibuat **Zero-Build & Standalone** (menggunakan Tailwind CSS CDN da
 
 ## 🚀 Cara Menjalankan Frontend
 
-Pilih salah satu cara paling mudah:
+Frontend ini sudah **di-embed ke backend Go**, jadi cukup jalankan backend-nya saja (satu service untuk UI + API):
 
-### Opsi 1: Menggunakan Python (Tersedia di hampir semua OS)
 ```bash
-cd frontend
-python3 -m http.server 3000
+cd backend
+go run .
 ```
-Buka browser di: `http://localhost:3000`
 
-### Opsi 2: Menggunakan Node / npx
+Buka browser di: `http://localhost:9994`
+
+> File di folder ini (`backend/web/`) ikut ter-*compile* ke dalam binary lewat `//go:embed`.
+> Kalau kamu mengubah `index.html` atau `app.js`, cukup restart `go run .`.
+
+### Menjalankan frontend terpisah (opsional, untuk development)
+
+Kalau mau pakai live-reload dari static server, kamu tetap bisa:
+
 ```bash
-cd frontend
+cd backend/web
 npx serve .
 ```
 
-### Opsi 3: VS Code Live Server
-Klik kanan `index.html` -> **Open with Live Server**.
+Lalu buka Settings (`⚙️`) di pojok kanan atas dan arahkan **API Base URL** ke `http://localhost:9994/api`.
 
 ---
 
 ## ⚙️ Mengarahkan ke Backend Anda
-Secara default, frontend ini memanggil backend di:
-`http://localhost:8000/api`
+Karena UI dan API disajikan dari origin yang sama, default-nya frontend memanggil `/api` (relatif), sehingga otomatis bekerja di local maupun setelah deploy.
 
-Jika backend Anda berjalan di port lain (misal `:3000`, `:5000`, atau live URL Render):
+Kalau backend kamu berjalan terpisah (misal `:3000`, `:5000`, atau URL Render lain):
 1. Buka web frontend di browser.
 2. Klik tombol indikator endpoint di pojok kanan atas (`⚙️ Settings`).
 3. Ubah **API Base URL** ke port/URL backend Anda, lalu klik **Save & Reconnect**.
 
-> 💡 **Penting (CORS):** Pastikan backend Anda mengaktifkan middleware **CORS** (`Access-Control-Allow-Origin: *` atau izinkan origin frontend Anda) agar browser tidak memblokir HTTP request.
+> 💡 **Penting (CORS):** Kalau frontend dan backend beda origin, pastikan backend mengaktifkan middleware **CORS** (`Access-Control-Allow-Origin: *` atau izinkan origin frontend Anda).
 
 ---
 

@@ -1,10 +1,18 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"net/http"
 	"os"
 	"strings"
 )
+
+// Frontend is embedded into the binary, so a single `go run .` / single
+// deployment serves both the static UI and the REST API.
+//
+//go:embed web
+var webFiles embed.FS
 
 func main() {
 	loadDotEnv(".env")
@@ -32,12 +40,25 @@ func main() {
 
 	http.HandleFunc("/api/watched", authMiddleware(handleWatched))
 
+	// Serve the embedded frontend on every other path.
+	webRoot, err := fs.Sub(webFiles, "web")
+	if err != nil {
+		panic(err)
+	}
+	http.Handle("/", http.FileServer(http.FS(webRoot)))
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9994"
+	}
+
 	server := &http.Server{
-		Addr:    ":8000",
+		Addr:    ":" + port,
 		Handler: http.DefaultServeMux,
 	}
 
-	println("Server starting on :8000")
+	println("Server starting on :" + port)
+	println("Open http://localhost:" + port)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		panic(err)
 	}

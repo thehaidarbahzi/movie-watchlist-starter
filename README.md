@@ -2,7 +2,7 @@
 
 Selamat datang di repositori penugasan backend **FilmLog (Movie Watchlist & Review Platform)**. Repositori ini menyediakan:
 1. **Initial Seed Database** (`data/movies.json` dan `data/seed.sql`) berisi 20 film kurasi awal dengan atribut lengkap.
-2. **Frontend Companion** (`frontend/`) bertema Letterboxd yang siap pakai untuk menguji endpoint backend Anda secara visual dan interaktif.
+2. **Frontend Companion** (`backend/web/`) bertema Letterboxd yang siap pakai untuk menguji endpoint backend Anda secara visual dan interaktif. Frontend ini di-*embed* ke binary Go, jadi backend dan UI berjalan sebagai satu service.
 
 ---
 
@@ -20,10 +20,13 @@ movie-watchlist-starter/
 ├── data/
 │   ├── movies.json     # Data 20 film awal (format JSON) untuk database seeder
 │   └── seed.sql        # Skrip SQL INSERT kompatibel dengan PostgreSQL & MySQL
-├── frontend/
-│   ├── index.html      # Frontend Letterboxd-style SPA (Zero-build Tailwind)
-│   ├── app.js          # Client logic & API caller
-│   └── README.md       # Panduan menjalankan frontend
+├── backend/
+│   ├── main.go         # Entrypoint: serve REST API + frontend
+│   └── web/            # Frontend Letterboxd-style SPA (di-embed ke binary)
+│       ├── index.html
+│       ├── app.js
+│       └── README.md
+├── Dockerfile          # Untuk deploy satu container (API + UI)
 └── README.md           # Panduan penugasan & spesifikasi API
 ```
 

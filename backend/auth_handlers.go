@@ -49,6 +49,5 @@ func handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	writeJSON(w, http.StatusCreated, map[string]interface{}{"message": "user registered"})
 }

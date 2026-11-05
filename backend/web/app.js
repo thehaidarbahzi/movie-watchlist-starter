@@ -6,8 +6,22 @@
 // ==========================================
 // 1. STATE MANAGEMENT
 // ==========================================
+// Resolve the backend base URL.
+// The UI is embedded in the Go binary and served from the same origin, so a
+// relative `/api` works locally (`go run .`) and in production.
+// Only file:// cannot resolve relative URLs, so fall back to the local port.
+function resolveDefaultApiBaseUrl() {
+  const saved = localStorage.getItem('filmlog_api_url');
+  if (saved) return saved;
+
+  if (window.location.protocol === 'file:') {
+    return 'http://localhost:9994/api';
+  }
+  return '/api';
+}
+
 const state = {
-  apiBaseUrl: localStorage.getItem('filmlog_api_url') || 'http://localhost:8000/api',
+  apiBaseUrl: resolveDefaultApiBaseUrl(),
   token: localStorage.getItem('filmlog_token') || null,
   user: JSON.parse(localStorage.getItem('filmlog_user') || 'null'),
   currentTab: 'discover',

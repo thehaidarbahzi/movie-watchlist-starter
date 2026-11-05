@@ -1,0 +1,11 @@
+.git
+.gitignore
+**/.env
+**/.env.local
+**/*.db
+**/*.db-journal
+**/*.db-wal
+**/*.db-shm
+**/server
+README.md
+DEPLOY.md
